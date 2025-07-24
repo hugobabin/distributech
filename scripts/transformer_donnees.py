@@ -34,6 +34,32 @@ def transformer_donnees() -> Dict[str, pd.DataFrame]:
 
         # Intègre le DataFrame transformé dans un nouveau dictionnaire
         donnees_transformees[nom] = df
+    
+    # Récupère commandes
+    commandes: pd.DataFrame = donnees_transformees["commandes"]
+
+    # Calcule total ligne pour chaque ligne de commande
+    commandes["total_ligne"] = commandes["quantity"] * commandes["unit_price"]
+    
+    # Instancie dictionnaire pour stocker les paniers
+    paniers = {}
+
+    # Parcourt les commandes pour calculer le total des paniers
+    for ligne in commandes.iterrows():
+        ligne_contenu = ligne[1]
+        num_commande = ligne_contenu["numero_commande"]
+        quantite = ligne_contenu["quantity"]
+        prix_unitaire = ligne_contenu["unit_price"]
+        if paniers.get(num_commande) is not None:
+            paniers[num_commande] += (quantite * prix_unitaire)
+        else:
+            paniers[num_commande] = (quantite * prix_unitaire)
+    
+    # Crée un DataFrame pour les paniers à partir du dictionnaire paniers
+    donnees_transformees["paniers"] = pd.DataFrame(
+        paniers.items(),
+        columns=["numero_commande", "total_panier"]
+        )
 
     # Enregistre les données transformées dans des fichiers CSV individuels
     chemin_donnees_transformees = "../data/transform/"
