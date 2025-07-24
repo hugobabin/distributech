@@ -1,0 +1,3 @@
+.venv/
+bdd/db/
+data/db_stock.py
