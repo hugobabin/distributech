@@ -1,3 +1,6 @@
 .venv/
+.env
 bdd/db/
 data/db_stock.py
+data/transform
+scripts/__pycache__
