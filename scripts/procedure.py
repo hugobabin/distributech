@@ -8,7 +8,7 @@ load_dotenv()
 user = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWORD")
 
-def exporter_stock_disponible_csv():
+def exporter_stock_disponible_csv(date_saisie):
     print("Execution de : Procedure")
     try:
         conn = mysql.connect(
@@ -29,17 +29,20 @@ def exporter_stock_disponible_csv():
         df_produits = pd.DataFrame(produits, columns=["product_id", "product_name"])
 
         # Quantité produite par produit
-        cursor.execute("""
+        cursor.execute(f"""
             SELECT product_id, SUM(quantity) AS quantite_produite
             FROM productions
+            WHERE date_production <= DATE '{date_saisie}' 
             GROUP BY product_id
         """)
         prod_data = {row[0]: row[1] for row in cursor.fetchall()}
 
         # Quantité vendue par produit
-        cursor.execute("""
-            SELECT product_id, SUM(quantity) AS quantite_vendue
+        cursor.execute(f"""
+            SELECT commandes_produits.product_id, SUM(commandes_produits.quantity) AS quantite_vendue
             FROM commandes_produits
+            JOIN commandes ON commandes_produits.commande_id
+            WHERE commandes.commande_date <= DATE '{date_saisie}'
             GROUP BY product_id
         """)
         vente_data = {row[0]: row[1] for row in cursor.fetchall()}
@@ -59,9 +62,9 @@ def exporter_stock_disponible_csv():
         df_final = pd.merge(df_produits, df_stock, on="product_id", how="left").fillna(0)
 
         # Sauvegarde CSV
-        output_dir = Path("../data/transform")
+        output_dir = Path("../data/export")
         output_dir.mkdir(parents=True, exist_ok=True)
-        csv_path = output_dir / "stock_disponible.csv"
+        csv_path = output_dir / f"stock_disponible_{date_saisie}.csv"
         df_final.to_csv(csv_path, index=False)
 
         print(f"CSV exporté : {csv_path}")
