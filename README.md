@@ -6,6 +6,9 @@ Le projet Distributech est un projet qui propose une approche ETL afin d'extrair
 
 - git clone https://github.com/hugobabin/distributech (dans le répertoire où vous souhaitez)
 - docker-compose up -d (dans le répertoire bdd)
+- python3 -m venv .venv (dans la racine du projet)
+- source .venv/bin/activate (dans la racine du projet)
+- pip install -r requirements.txt (dans la racine du projet)
 - python3 main.py 2025 08 01 (date optionnelle comme expliqué dans contexte, à exécuter dans le répertoire scripts du projet)
 
 Les exports sont au format CSV et sont disponibles dans le sous-répertoire export du répertoire data.
