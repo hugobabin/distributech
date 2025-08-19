@@ -2,10 +2,10 @@
 
 Le projet Distributech est un projet qui propose une approche ETL afin d'extraire des données en provenance de deux sources (un fichier CSV et une base de données SQLite). Le système permet par ailleurs en lancant le main d'exporter les stocks à date donnée en argument (si aucun n'est fourni, la date du jour est prise en compte).
 
-# Collaborateurs
+## Collaborateurs
 
 - https://github.com/khaoulaMili123
-- Corto Gayet
+- https://github.com/CortoGyt
 
 ## Librairies utilisées
 
@@ -23,3 +23,4 @@ Le projet Distributech est un projet qui propose une approche ETL afin d'extrair
 
 Les exports sont au format CSV et sont disponibles dans le sous-répertoire export du répertoire data.
 Merci pour la lecture ;)
+
